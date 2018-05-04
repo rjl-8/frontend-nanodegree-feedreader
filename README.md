@@ -46,3 +46,13 @@ Review the Feed Reader Testing [Project Rubric](https://review.udacity.com/#!/pr
 19. Implement error handling for undefined variables and out-of-bound array access.
 20. When complete - all of your tests should pass. 
 21. Write a README file detailing all steps required to successfully run the application. If you have added additional tests (for Udacious Test Coverage),  provide documentation for what these future features are and what the tests are checking for.
+
+# How I completed this project?
+
+1. all modifications occurred within the feedreader.js file
+2. to check that each feed has a url defined, i wrote a simple loop through the allFeeds array, running an expect on the url property's existence and that it had a length greater than 0
+3. to check that each feed has a name defined, i basically copied the test from 2 above but this time referencing the name property with the allFeeds objects
+4. to check that the menu starts out hidden, after looking over the css, i checked that the body has a className of 'menu-hidden'
+5. to check that the menu becomes visible when clicked, i triggered a click event and then checked the className of the body tag again. As an extra validation, i triggered another click event and made sure the className had toggled back.
+6. to test that loadFeed loaded at least one entry, i executed loadFeed(0) asynchronously using the beforeEach functionality within Jasmine.  Then i validated that the number of article tags in the document was > 0.
+7. to test that the loadFeed function would load a different set of entries for different feeds, i initiated loadFeed(0) as in item 6 above.  However, in the callback function for this call, after capturing the results of the call, I initiated loadFeed(1) and then captured the results for that call.  Then I compared the two result sets, in addition to validating that the result set for loadFeed(1) had some entries.
