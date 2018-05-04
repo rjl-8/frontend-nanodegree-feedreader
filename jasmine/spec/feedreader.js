@@ -61,6 +61,7 @@ $(function() {
          * hiding/showing of the menu element.
          */
         it('the menu will be hidden to start', function() {
+            expect($('body')[0]).toBeDefined();
             expect($('body')[0].className).toBe('menu-hidden');
         });
 
@@ -70,8 +71,11 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
         it('the menu will become visible when the menu icon is clicked and invisible on a subsequent click', function() {
+            expect($('body')[0]).toBeDefined();
+
             $('.menu-icon-link').trigger('click');
             expect($('body')[0].className).toBe('');
+
             $('.menu-icon-link').trigger('click');
             expect($('body')[0].className).toBe('menu-hidden');
         });
@@ -92,7 +96,7 @@ $(function() {
             });
         });
 
-        it('loadFeed runs upon loading and there is at least a single entry', function(done) {
+        it('loadFeed runs and there is at least a single entry', function(done) {
             expect(document.getElementsByTagName('article').length).toBeGreaterThan(0);
             done();
         });
@@ -108,19 +112,32 @@ $(function() {
         var feed0 = [],
             feed1 = [];
         beforeEach(function(done) {
-            var thefeeds = document.getElementsByTagName('article')
-            for (var i = 0; i < thefeeds.length; i++) {
-                feed0.push(thefeeds[i])
-            }
-            loadFeed(1, function() {
+            var thefeeds = document.getElementsByTagName('article');
+
+            // load feed 0
+            loadFeed(0, function() {
+                // capture contents after load feed 0 completes
                 for (var i = 0; i < thefeeds.length; i++) {
-                    feed1.push(thefeeds[i])
+                    feed0.push(thefeeds[i])
                 }
-                done();
+
+                // load feed 1
+                loadFeed(1, function() {
+                    // capture contents after load feed 1 completes
+                    for (var i = 0; i < thefeeds.length; i++) {
+                        feed1.push(thefeeds[i])
+                    }
+
+                    // finally done
+                    done();
+                });
             });
         });
 
         it('the content changes when loadFeed runs', function(done) {
+            // make sure feed1 loaded something
+            expect(feed1.length).toBeGreaterThan(0);
+            // make sure its different than feed0
             expect(feed0).not.toBe(feed1);
             done();
         });
