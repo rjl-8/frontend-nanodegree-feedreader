@@ -69,10 +69,11 @@ $(function() {
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
-        it('the menu will become visible when the menu icon is clicked', function() {
+        it('the menu will become visible when the menu icon is clicked and invisible on a subsequent click', function() {
             $('.menu-icon-link').trigger('click');
-
             expect($('body')[0].className).toBe('');
+            $('.menu-icon-link').trigger('click');
+            expect($('body')[0].className).toBe('menu-hidden');
         });
     });
 
@@ -85,12 +86,15 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-        it('loadFeed runs upon loading and there is at least a single entry', function() {
-            beforeEach(function(done) {
-
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
             });
+        });
 
-            it('')
+        it('loadFeed runs upon loading and there is at least a single entry', function(done) {
+            expect(document.getElementsByTagName('article').length).toBeGreaterThan(0);
+            done();
         });
     });
 
@@ -101,8 +105,24 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        it('the content changes when loadFeed runs', function() {
+        var feed0 = [],
+            feed1 = [];
+        beforeEach(function(done) {
+            var thefeeds = document.getElementsByTagName('article')
+            for (var i = 0; i < thefeeds.length; i++) {
+                feed0.push(thefeeds[i])
+            }
+            loadFeed(1, function() {
+                for (var i = 0; i < thefeeds.length; i++) {
+                    feed1.push(thefeeds[i])
+                }
+                done();
+            });
+        });
 
+        it('the content changes when loadFeed runs', function(done) {
+            expect(feed0).not.toBe(feed1);
+            done();
         });
     });
 }());
