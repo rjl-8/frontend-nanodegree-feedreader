@@ -59,8 +59,8 @@ $(function() {
          * hidden by default. 
          */
         it('the menu will be hidden to start', function() {
-            expect($('body')[0]).toBeDefined();
-            expect($('body')[0].hasClass('menu-hidden')).toBe(true);
+            expect($('body')).toBeDefined();
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
 
          /* A test that ensures the menu changes
@@ -69,13 +69,13 @@ $(function() {
           * disappearing on the second click
           */
         it('the menu will become visible when the menu icon is clicked and invisible on a subsequent click', function() {
-            expect($('body')[0]).toBeDefined();
+            expect($('body')).toBeDefined();
 
             $('.menu-icon-link').trigger('click');
-            expect($('body')[0].hasClass('menu-hidden')).toBe(false);
+            expect($('body').hasClass('menu-hidden')).toBe(false);
 
             $('.menu-icon-link').trigger('click');
-            expect($('body')[0].hasClass('menu-hidden')).toBe(true);
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
     });
 
@@ -113,7 +113,10 @@ $(function() {
         beforeEach(function(done) {
             var thefeeds = document.getElementsByTagName('article');
 
-            // load feed 0
+            // load feed 0.  as part of the callback for loadFeed(0)
+            // capture the results of loadFeed(0) and then call
+            // loadFeed(1).  as part of the callback for loadFeed(1)
+            // capture the results of loadFeed(1) and then call done
             loadFeed(0, function() {
                 // capture contents after load feed 0 completes
                 for (var i = 0; i < thefeeds.length; i++) {
